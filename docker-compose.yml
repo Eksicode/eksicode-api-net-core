@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  backend:
+    container_name: EksiCodeBackend
+    build:
+      context: .
+      dockerfile: EksiCode/Dockerfile
+    ports:
+      - "3000"
+    networks:
+      main:
+        aliases:
+          - EksiCodeBackend
+
+  web:
+    container_name: EksiCodeWeb
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
+    restart: on-failure
+    links:
+      - backend
+    networks:
+      main:
+        aliases:
+          - nginx
+volumes:
+  backend:
+  nginx:
+
+networks:
+  main:
+
+
+
+
+
+
+

@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  backend:
+    container_name: EksiCodeBackend
+    build:
+      context: .
+      dockerfile: EksiCode/Dockerfile
+    ports:
+      - "3000"
+    networks:
+      main:
+        aliases:
+          - EksiCodeBackend
+
+  web:
+    container_name: EksiCodeWeb
+    image: nginx:alpine
+    environment:
+      - TZ=Europe/Istanbul
+      - PROTOCOL=HTTP
+    privileged: true
+    volumes:
+      - ./nginx/dev/logs/:/etc/nginx/logs/
+      - ./nginx/dev/gallus-default.conf:/etc/nginx/nginx.conf
+      - ./nginx/dev/mime.types:/etc/nginx/mime.types
+      - ./nginx/dev/gallus-chanined.pem:/etc/ssl/certs/chained.pem
+      - ./nginx/dev/gallus-dhparam.pem:/etc/ssl/certs/dhparam.pem
+      - ./nginx/dev/gallus-domain.key:/etc/ssl/private/domain.key
+    depends_on:
+      - backend
+    restart: on-failure
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - backend
+    networks:
+      main:
+        aliases:
+          - nginx
+
+volumes:
+  backend:
+  nginx:
+    
+networks:
+  main:

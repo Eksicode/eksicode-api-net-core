@@ -24,6 +24,11 @@ bld/
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 
+# Ignore Appsettings Configuration Files
+**/appsettings.development.json
+**/appsettings.json
+# **/appsettings.production.json
+
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*

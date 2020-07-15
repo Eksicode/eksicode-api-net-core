@@ -1,5 +1,7 @@
+using EksiCode.Dal.Concrete.EntityFramewrok.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,14 +10,24 @@ namespace EksiCode.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            Environment = env;
         }
 
-        public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
+            if (Environment.IsProduction())
+                services.AddDbContext<EksiCodeContext>(opt =>
+                    opt.UseNpgsql(Configuration.GetConnectionString("EksiCode")));
+            else
+                services.AddDbContext<EksiCodeContext>(opt =>
+                    opt.UseNpgsql(Configuration.GetConnectionString("EksiCodeDev")));
+
             services.AddControllers();
         }
 

@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EksiCodeBackend.Core\EksiCodeBackend.Core.csproj" />
+    <ProjectReference Include="..\EksiCodeBackend.DataAccess\EksiCodeBackend.DataAccess.csproj" />
+    <ProjectReference Include="..\EksiCodeBackend.Entities\EksiCodeBackend.Entities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Contants\" />
+    <Folder Include="DependencyResolvers\" />
+    <Folder Include="DependencyResolvers\AutoFac\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="9.1.2" />
+    <PackageReference Include="Autofac" Version="5.2.0" />
+    <PackageReference Include="Autofac.Extras.DynamicProxy" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
+  </ItemGroup>
+</Project>

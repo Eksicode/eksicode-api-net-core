@@ -1,45 +1,60 @@
 version: '3'
 
 services:
-  backend:
-    container_name: EksiCodeBackend
-    build:
-      context: .
-      dockerfile: EksiCode/Dockerfile
-    ports:
-      - "3000"
-    networks:
-      main:
-        aliases:
-          - EksiCodeBackend
-
   web:
-    container_name: EksiCodeWeb
+    container_name: eksiCodeBackendNginx
     image: nginx:alpine
     ports:
       - "80:80"
-      - "443:443"
     volumes:
+      - ./web:/var/www/myapp
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - backend
-    restart: on-failure
     links:
       - backend
     networks:
       main:
         aliases:
-          - nginx
-volumes:
+          - eksiCodeBackendNginx
+
   backend:
-  nginx:
+    container_name: eksiCodeBackendWebAPI
+    build:
+      context: .
+      dockerfile: EksiCodeBackend/EksiCodeBackend.WebAPI/Dockerfile
+    
+    ports:
+      - "3000"
+    depends_on:
+      - database
+    networks:
+      main:
+        aliases:
+          - eksiCodeBackendWebAPI
+
+  database:
+    container_name: eksiCodeBackendDatabase
+    image: "postgres" # use latest official postgres version
+    volumes:
+      - ./db/db.sql:/docker-entrypoint-initdb.d/db.sql
+    env_file:
+      - database-sample.env # configure postgres
+    ports:
+        - 5432:2345
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      main:
+        aliases:
+          - eksiCodeBackendDatabase
+    
+volumes:
+  web:
+  backend:
+  database:
 
 networks:
   main:
-
-
-
-
-
-
-
+    driver: bridge

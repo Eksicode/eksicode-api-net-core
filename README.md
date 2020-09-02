@@ -1,6 +1,6 @@
-﻿### PROJEDE KULLANILAN YAZILIM HAKKINDA
+### PROJEDE KULLANILAN YAZILIM HAKKINDA
 Asp.net Core 3.1 , Nginx , Postgres
-
+#
 ### Docker İle Ayağa Kaldırmak İçin
 - Sisteminizde docker yüklü olduğundan emin olunuz.
 - Reponun kök klasörüne geliniz.
